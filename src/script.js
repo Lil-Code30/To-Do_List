@@ -56,6 +56,39 @@ addTask.addEventListener('click', (e) => {
     hideForm();
 });
 
+// read a task
+const readTask = (id) => {
+
+    const taskToRead = todoList.find((task) => task.id === id);
+
+    // creating a dialog box
+    const dialog = document.createElement('dialog');
+    dialog.classList.add('read-dialog');
+    dialog.id = `read-dialog-${taskToRead.id}`;
+
+    if (!taskToRead) {
+        alert(`Task with id ${id} not found.`);
+        return; // Exit the function if the task is not found
+    }
+
+    dialog.innerHTML = `
+        <button id='close-read-dialog' onclick="document.getElementById('read-dialog-${taskToRead.id}').close();">X</button>
+        <div class="read-dialog">
+            <h2>${taskToRead.title}</h2>
+            <p>${taskToRead.description}</p>
+            <p>${taskToRead.dueDate}</p>
+            <p>${taskToRead.priority}</p>
+            <p>${taskToRead.projects}</p>
+            <p>${taskToRead.completed ? 'Completed' : 'Not Completed'}</p>  
+        </div>
+    `;
+
+    document.body.appendChild(dialog);
+    dialog.showModal();
+
+}
+
+
 // deleting a task
 const deleteTask = (id) =>{
     todoList = todoList.filter((task) => task.id !== id);
@@ -67,6 +100,8 @@ const deleteTask = (id) =>{
 const  editTask = (id) => {
  
     const taskToEdit = todoList.find((task) => task.id === id);
+
+    //document.getElementById(`read-dialog-${id}`).close();
 
     // creating a dialog box
     const dialog = document.createElement('dialog');
@@ -128,19 +163,12 @@ const  editTask = (id) => {
     editForm.addEventListener('click', (e) =>{
         e.preventDefault();
 
-        console.log(taskToEdit.id);
-        console.log(document.getElementById('edit-title-'+ taskToEdit.id).value);
-        
-        
         // Retrieve the updated values from the form
         const updatedTitle = document.getElementById('edit-title-'+ taskToEdit.id).value;
         const updatedDescription = document.getElementById('edit-description-'+ taskToEdit.id).value;
         const updatedDueDate = document.getElementById('edit-due-date-'+ taskToEdit.id).value;
         const updatedPriority = document.getElementById('edit-priority-'+ taskToEdit.id).value;
         const updatedProject = document.getElementById('edit-projects-'+ taskToEdit.id).value;
-        
-        
-        console.log(updatedTitle, updatedDescription, updatedDueDate, updatedPriority, updatedProject);
 
         // Update the task object with the new values
         if (taskToEdit) {
@@ -159,8 +187,6 @@ const  editTask = (id) => {
         }else {
             alert.error(`Task with id ${id} not found in todoList array.`);
         }
-            
-        
     })
     
 }
@@ -202,6 +228,7 @@ const renderTodoList = () => {
             const li = document.createElement('li');
             li.classList.add('task');
             li.setAttribute('id', `task-${task.id}`);
+            
 
             // principal div
             const taskDiv = document.createElement('div');
@@ -211,6 +238,11 @@ const renderTodoList = () => {
             // left div in the principal div
             const taskInfo = document.createElement('div');
             taskInfo.classList.add('task-info');
+
+            taskInfo.addEventListener('click', (e) => {
+                e.preventDefault();
+                readTask(task.id);
+            });
 
             // elements in the left div
             const checkTask = document.createElement('input');
@@ -279,6 +311,7 @@ const renderTodoList = () => {
             // adding event listeners to the edit button
             editBtn.addEventListener('click', (e) => {
                 e.preventDefault();
+                
                 editTask(task.id);
             })
 
@@ -293,7 +326,8 @@ const renderTodoList = () => {
             })
 
             // appending elements to the principal div
-            taskInfo.append(checkTask, taskTitle, dueDate);
+            li.append(checkTask);
+            taskInfo.append( taskTitle, dueDate);
             taskBtns.append(editBtn, deleteBtn);
 
             taskDiv.append(taskInfo, taskBtns);
