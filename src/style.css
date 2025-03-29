@@ -265,7 +265,7 @@ main #todo-container .projects-header button{
 ::backdrop {
     background-image: linear-gradient(rgba(0, 0, 0, 0.668), rgba(0, 0, 0, 0.682));
 }
-#edit-dialog {
+.edit-dialog {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -284,7 +284,12 @@ button#close-edit-dialog {
     background-color: transparent;
     border: none;
     font-size: 1.5em;
+    font-weight: bold;
+    border: 1px solid black;
+    border-radius: 5px;
     cursor: pointer;
+    background-color: red;
+    
 }
 
 /* Style pour le formulaire */
@@ -345,7 +350,7 @@ button#close-edit-dialog {
     width: 48%;
 }
 
-.form-btn-container button[type="reset"] {
+.form-btn-container button.cancel-edit-task-btn {
     background-color: #f44336;
 }
 

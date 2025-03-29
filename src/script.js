@@ -65,31 +65,37 @@ const deleteTask = (id) =>{
 
 // update a task 
 const  editTask = (id) => {
+ 
+    const taskToEdit = todoList.find((task) => task.id === id);
 
     // creating a dialog box
     const dialog = document.createElement('dialog');
-    dialog.id = 'edit-dialog';
-    
-    const taskToEdit = todoList.find((task) => task.id === id);
+    dialog.classList.add('edit-dialog');
+    dialog.id = `edit-dialog-${taskToEdit.id}`;
+
+    if (!taskToEdit) {
+        alert(`Task with id ${id} not found.`);
+        return; // Exit the function if the task is not found
+    }
 
     dialog.innerHTML = `
     <div class="edit-dialog">
         <h2>Edit Task : ${taskToEdit.id}</h2>
-        <button id='close-edit-dialog' onclick="dialog.close()">X</button>
+        <button id='close-edit-dialog' onclick="document.getElementById('edit-dialog-${taskToEdit.id}').close();">X</button>
     </div>
     <form action="" method="post" class="dialog-task-form">
         <label for="title">Title</label><br>
-        <input type="text" id="edit-title" name="title" value="${taskToEdit.title}"><br>
+        <input type="text" id="edit-title-${taskToEdit.id}" name="title" value="${taskToEdit.title}"><br>
         <label for="description">Description</label><br>
-        <textarea name="description" id="edit-description" cols="30" rows="10">${taskToEdit.description}</textarea><br>
+        <textarea name="description" id="edit-description-${taskToEdit.id}" cols="30" rows="10">${taskToEdit.description}</textarea><br>
         <div class="form-section">
             <div>
                 <label for="due-date">Due Date</label><br>
-                <input type="date" name="edit-due-date" id="due-date" required value="${taskToEdit.dueDate}">
+                <input type="date" name="edit-due-date" id="edit-due-date-${taskToEdit.id}" required value="${taskToEdit.dueDate}">
             </div>
             <div>
                 <label for="priority">Priority</label><br>
-                <select name="priority" id="edit-priority">
+                <select name="priority" id="edit-priority-${taskToEdit.id}">
                     <option value="low" ${taskToEdit.priority === 'low' ? 'selected' : ''}>Low</option>
                     <option value="medium" ${taskToEdit.priority === 'medium' ? 'selected' : ''}>Medium</option>
                     <option value="high" ${taskToEdit.priority === 'high' ? 'selected' : ''}>High</option>
@@ -97,13 +103,13 @@ const  editTask = (id) => {
             </div>
         </div>
         <label for="projects">Project</label><br>
-        <select name="projects" id="projects">
+        <select name="projects" id="edit-projects-${taskToEdit.id}">
             <option value="default" selected>default</option>
             
         </select>
         <div class="form-btn-container">
-            <button type="submit" id="add-task-btn">Submit</button>
-            <button type="reset" id="cancel-task-btn" onclick="dialog.close()">Cancel</button>
+            <button type="submit" id="submit-edit-task-btn-${taskToEdit.id}">Submit</button>
+            <button class="cancel-edit-task-btn"  id="cancel-edit-task-btn-${taskToEdit.id}" onclick="document.getElementById('edit-dialog-${taskToEdit.id}').close();">Cancel</button>
         </div>
     </form> 
     `;
@@ -115,6 +121,47 @@ const  editTask = (id) => {
     // closeDialog.addEventListener('click', () => {
     //     dialog.close();
     // });
+
+    
+    // updating the task
+    const editForm = document.getElementById('submit-edit-task-btn-' + taskToEdit.id);
+    editForm.addEventListener('click', (e) =>{
+        e.preventDefault();
+
+        console.log(taskToEdit.id);
+        console.log(document.getElementById('edit-title-'+ taskToEdit.id).value);
+        
+        
+        // Retrieve the updated values from the form
+        const updatedTitle = document.getElementById('edit-title-'+ taskToEdit.id).value;
+        const updatedDescription = document.getElementById('edit-description-'+ taskToEdit.id).value;
+        const updatedDueDate = document.getElementById('edit-due-date-'+ taskToEdit.id).value;
+        const updatedPriority = document.getElementById('edit-priority-'+ taskToEdit.id).value;
+        const updatedProject = document.getElementById('edit-projects-'+ taskToEdit.id).value;
+        
+        
+        console.log(updatedTitle, updatedDescription, updatedDueDate, updatedPriority, updatedProject);
+
+        // Update the task object with the new values
+        if (taskToEdit) {
+            taskToEdit.title = updatedTitle;
+            taskToEdit.description = updatedDescription;
+            taskToEdit.dueDate = updatedDueDate;
+            taskToEdit.priority = updatedPriority;
+            taskToEdit.projects = updatedProject;
+
+            // Update the local storage
+            updateLocalStorage();
+            dialog.close();
+            renderTodoList();
+            console.log("Task updated successfully!");
+            
+        }else {
+            alert.error(`Task with id ${id} not found in todoList array.`);
+        }
+            
+        
+    })
     
 }
 
