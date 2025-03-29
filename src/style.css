@@ -1,0 +1,354 @@
+:root{
+    /*all colors here*/
+    --primary-color: #0D92F4;
+    --general-color: black;
+    --secondary-color: #77CDFF;
+    --tertiary-color: rgb(9, 186, 9);
+    --fouth-color: #f7374e96;
+
+    /*all fonts here*/
+    --primary-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --secondary-font: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+ul{
+    list-style-type: none;
+}
+
+h2{
+    font-family: var(--primary-font);
+    font-size: 1.6rem;
+}
+
+
+header{
+    background-color: var(--primary-color);
+    text-align: center;
+    padding: 2rem;
+    font-family: var(--primary-font);
+    font-size: 2rem;
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 0 3rem;
+    padding: 2rem 0;
+}
+main .new-task-container{
+    align-self: flex-start;
+}
+main .new-task-container #new-task-btn{
+    padding: 0.5rem;
+    background-color: var(--tertiary-color);
+    border: 1px solid black;
+    border-radius: 5px;
+    font-family: var(--primary-font);
+    transition: all 0.3s ease-in-out;
+}
+main .new-task-container #new-task-btn:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+main .new-task-container #new-task-btn:active{
+    transform: scale(0.9);
+    cursor: pointer;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+main .new-task-container .new-task-form-container{
+    margin: 2rem 0;
+    border: 1px solid black;
+    padding: 0.5rem;
+    border-radius: 5px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+    width: 400px;
+    display: none;
+}
+
+/* form design */
+main .new-task-container .new-task-form-container form{
+    width: 100%;
+    position: relative;
+}
+.new-task-btn-container{
+    margin: 1rem 0; 
+}
+#close-form-btn{
+    position: absolute;
+    right: 5px;
+    top: -5px;
+    background-color: red;
+    border: 1px solid black;
+    padding: 0.3rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: var(--primary-font);
+    font-weight: bold;
+     
+}
+main .new-task-container .new-task-form-container form label{
+    font-family: var(--secondary-font);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+main .new-task-container .new-task-form-container form input,
+#priority,
+#projects{
+    width: 100%;
+    margin: 0.3rem 0;
+    height: 30px;
+    background-color: gray;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+main .new-task-container .new-task-form-container form textarea{
+    width: 100%;
+    margin: 0.3rem 0;
+    background-color: gray;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+main .new-task-container .new-task-form-container form .form-section{
+    display: flex;
+    margin: 0.5rem 0;
+    width: 100%;
+}
+main .new-task-container .new-task-form-container form .form-section div{
+    width: 50%;
+    margin: 0.2rem;
+}
+
+main .new-task-container .new-task-form-container form .form-btn-container{
+    margin-top: 1rem;
+}
+main .new-task-container .new-task-form-container form .form-btn-container #add-task-btn{
+    padding: 0.3rem;
+    background-color: var(--tertiary-color);
+    border: 1px solid black;
+    border-radius: 3px;
+    font-family: var(--primary-font);
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+    margin-right: 5px;
+}
+main .new-task-container .new-task-form-container form .form-btn-container #add-task-btn:hover{
+    background-color: white;
+    color: var(--tertiary-color);
+    border: 1px solid var(--tertiary-color);
+    cursor: pointer;
+    transform: scale(1.1);
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+main .new-task-container .new-task-form-container form .form-btn-container #cancel-task-btn{
+    padding: 0.3rem;
+    background-color: var(--fouth-color);
+    border: 1px solid black;
+    border-radius: 3px;
+    font-family: var(--primary-font);
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+}
+main .new-task-container .new-task-form-container form .form-btn-container #cancel-task-btn:hover{
+    background-color: white;
+    color: var(--fouth-color);
+    border: 1px solid var(--fouth-color);
+    cursor: pointer;
+    transform: scale(1.1);
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+main .new-task-container .new-task-form-container form .form-btn-container button:active{
+    transform: scale(0.9);
+    cursor: pointer;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* todo containers */
+main #todo-container{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    box-sizing: border-box;
+}
+main #todo-container > div{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 0.5rem;
+    background-color: var(--primary-color);
+}
+main #todo-container #tasks-container{
+    width: 68%;
+}
+main #todo-container #projects-container{
+    width: 28%;
+    min-height: 200px;
+}
+main #todo-container .projects-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+main #todo-container .projects-header button{
+    background-color: var(--tertiary-color);
+    border: 1px solid black;
+    padding: 2px;
+    border-radius: 3px;
+}
+
+/* task list design */
+.task-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+    transition: all 0.1s ease-in-out;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+.task-div-hover:hover{
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.729);
+    cursor: pointer;
+    border: 2px solid black;
+}
+.task-div h3{
+    font-family: var(--secondary-font);
+    font-size: 1.2rem;
+    color: var(--general-color);
+    text-transform: capitalize;
+}
+.task-completed{
+    text-decoration: line-through;
+}
+.task-div p{
+    font-style: italic;
+    font-size: small;
+    color: rgba(0, 0, 0, 0.676);
+}
+.task-edit-btn,
+.task-delete-btn{
+    margin-right: 3px;
+    padding: 0.2rem;
+    font-family: var(--primary-font);
+    border-radius: 3px;
+    font-weight: bold;
+    border: 1px solid black;
+}
+.task-edit-btn{
+    background-color: #FBA518;
+}
+.task-delete-btn{
+    background-color: #E52020;
+}
+
+/* disabled class */
+.task-completed{
+    background-color: rgba(85, 85, 85, 0.796);
+    cursor: not-allowed;
+    /* pointer-events: none !important; */
+}
+.line-through{
+    text-decoration: line-through;
+}
+
+/* Style général pour le dialogue */
+::backdrop {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.668), rgba(0, 0, 0, 0.682));
+}
+#edit-dialog {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+button#close-edit-dialog {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+/* Style pour le formulaire */
+.dialog-task-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dialog-task-form label {
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: left;
+    width: 100%;
+}
+
+.dialog-task-form input,
+.dialog-task-form textarea,
+.dialog-task-form select {
+    width: 80%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.dialog-task-form textarea {
+    resize: vertical;
+}
+
+.form-section {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.form-section > div {
+    width: 48%;
+}
+
+.form-btn-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.form-btn-container button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 48%;
+}
+
+.form-btn-container button[type="reset"] {
+    background-color: #f44336;
+}
+
+.form-btn-container button:hover {
+    opacity: 0.9;
+}
