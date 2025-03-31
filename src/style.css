@@ -404,3 +404,98 @@ ul#projects-list-container .delete-project-btn{
 ul#projects-list-container .delete-project-btn:hover{
     cursor: pointer;
 }
+
+/* styling the read task dialog */
+dialog.read-dialog{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+    box-sizing: border-box;
+}
+.read-dialog-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--secondary-font);
+}
+.read-dialog-hr{
+    width: 100%;
+    border: 1px solid black;
+}
+.read-dialog-text{
+    font-weight: bold;
+}
+.read-dialog-content h2 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* styling the project form */
+
+.project-dialog{
+    border: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+    box-sizing: border-box;
+}
+.project-dialog-content{
+    padding: 20px;
+    background-color: #f9f9f9;
+    font-family: var(--secondary-font);
+}
+.project-dialog-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #060606;
+    font-family: var(--primary-font);
+}
+.project-dialog-content .project-content-section{
+    display: flex;
+    gap: 15px;
+    margin: 0.5rem 0;
+}
+.dialog-project-form label {
+    font-weight: bold;
+    color: #000000;
+    font-family: var(--secondary-font);
+}
+.dialog-project-form input[type="text"]{
+    height: 25px;
+}
+#add-project-btn {
+    background-color: #4CAF50; /* Vert */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+  
+#add-project-btn:hover {
+    background-color: #3e8e41; /* Vert plus foncé au survol */
+}
+  
+  /*  Style pour le pseudo-élément ::backdrop (masque d'arrière-plan) */
+dialog::backdrop {
+      background-color: rgba(0, 0, 0, 0.5); /* Fond noir semi-transparent */
+      backdrop-filter: blur(5px); /* Flou d'arrière-plan (support limité) */
+}

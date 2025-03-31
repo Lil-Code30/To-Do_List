@@ -76,13 +76,14 @@ const readTask = (id) => {
 
     dialog.innerHTML = `
         <button id='close-read-dialog' onclick="document.getElementById('read-dialog-${taskToRead.id}').close();">X</button>
-        <div class="read-dialog">
-            <h2>${taskToRead.title}</h2>
-            <p>${taskToRead.description}</p>
-            <p>${taskToRead.dueDate}</p>
-            <p>${taskToRead.priority}</p>
-            <p>${taskToRead.projects}</p>
-            <p>${taskToRead.completed ? 'Completed' : 'Not Completed'}</p>  
+        <div class="read-dialog-content">
+            <h2>Title: ${taskToRead.title}</h2>
+            <hr class="read-dialog-hr">
+            <p><span class="read-dialog-text">Description:</span> ${taskToRead.description}</p>
+            <p><span class="read-dialog-text">Due Date:</span> ${taskToRead.dueDate}</p>
+            <p><span class="read-dialog-text">Priority:</span> ${taskToRead.priority}</p>
+            <p><span class="read-dialog-text">Project:</span> ${taskToRead.projects}</p>
+            <p><span class="read-dialog-text">Status:</span> ${taskToRead.completed ? 'Completed' : 'Not Completed'}</p>  
         </div>
     `;
 
@@ -563,10 +564,14 @@ displayProjectDialogBtn.addEventListener('click', (e) => {
             </div>
             <h2>New Project</h2>
             <form action="" method="post" class="dialog-project-form">
-                <label for="project-name">Project Name</label><br>
-                <input type="text" id="project-name" name="project-name" required><br>
-                <label for="project-color-tag">Color</label><br>
-                <input type="color" id="project-color-tag" name="project-color-tag" required><br>
+                <div class="project-content-section">
+                    <label for="project-name">Project Name : </label>
+                    <input type="text" id="project-name" name="project-name" required>
+                </div>
+                <div class="project-content-section">
+                    <label for="project-color-tag">Color : </label> 
+                    <input type="color" id="project-color-tag" name="project-color-tag" required>
+                </div>
                 <button id="add-project-btn" type="submit" >Add Project</button>
             </form>	
         </div>
