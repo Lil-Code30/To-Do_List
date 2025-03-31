@@ -174,7 +174,6 @@ main .new-task-container .new-task-form-container form .form-btn-container butto
 main #todo-container{
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
     box-sizing: border-box;
@@ -498,4 +497,34 @@ dialog.read-dialog{
 dialog::backdrop {
       background-color: rgba(0, 0, 0, 0.5); /* Fond noir semi-transparent */
       backdrop-filter: blur(5px); /* Flou d'arrière-plan (support limité) */
+}
+
+/* Media queries */
+
+/* Mobile */
+@media screen and (max-width: 480px) {
+    header h1{
+        font-size: 2rem;
+    }
+}
+
+/* Tablet */
+@media screen and (max-width: 820px) {
+    header h1{
+        font-size: 2.5rem;
+    }
+    section.new-task-container{
+        align-self: center;
+    }
+    main #todo-container{
+        width: 100%;
+        margin: 0;
+        flex-wrap: wrap;
+    }
+    main #todo-container #tasks-container{
+        width: 90%;
+    }
+    main #todo-container #projects-container{
+        width: 90%;
+    }
 }
