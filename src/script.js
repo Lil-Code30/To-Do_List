@@ -46,6 +46,7 @@ closeForm.addEventListener('click', hideForm);
 // update local storage
 const updateLocalStorage = () => {
     localStorage.setItem('todo', JSON.stringify(todoList));
+    updateProjectsCountInProjectList();
     renderTodoList();
 }
 
@@ -56,6 +57,7 @@ addTask.addEventListener('click', (e) => {
 
     todoList.push(extractData());
     updateLocalStorage();
+    updateProjectsCountInProjectList();
     hideForm();
 });
 
@@ -96,11 +98,13 @@ const readTask = (id) => {
 // deleting a task
 const deleteTask = (id) =>{
     todoList = todoList.filter((task) => task.id !== id);
+    
     updateLocalStorage();
     renderTodoList();
+    
 }
 
-// update a task 
+// update a task
 const  editTask = (id) => {
  
     const taskToEdit = todoList.find((task) => task.id === id);
@@ -142,24 +146,33 @@ const  editTask = (id) => {
             </div>
         </div>
         <label for="projects">Project</label><br>
-        <select name="projects" id="edit-projects-${taskToEdit.id}">
-            <option value="default" selected>default</option>
-            
+        <select name="projects" class="edit-projects-select" id="edit-projects-${taskToEdit.id}">
+            <!-- Projects will be added here dynamically -->
+           ${projects.map((project) => `<option class="project-option" value="${project.name.toLowerCase()}" ${taskToEdit.projects.toLowerCase() === project.name.toLowerCase() ? 'selected' : ''}>${project.name}</option>`).join('')}
         </select>
         <div class="form-btn-container">
             <button type="submit" id="submit-edit-task-btn-${taskToEdit.id}">Submit</button>
         </div>
     </form> 
     `;
+    
 
     document.body.appendChild(dialog);
+    // adding the projects to the select element
+    // select from the edit form
+    /*const editProjectSelect = document.querySelector('.edit-projects-select');   
+
+    projects.forEach((project) => {
+        const projectOption = `
+            <option class="project-option" value="${project.name.toLowerCase()}" ${taskToEdit.projects.toLowerCase() === project.name.toLowerCase() ? 'selected' : ''}>${project.name}</option>
+        `; 
+
+        editProjectSelect.innerHTML += projectOption;
+    });*/
+
     dialog.showModal();
 
-    // const closeDialog = document.querySelector('#close-edit-dialog');
-    // closeDialog.addEventListener('click', () => {
-    //     dialog.close();
-    // });
-
+    
     
     // updating the task
     const editForm = document.getElementById('submit-edit-task-btn-' + taskToEdit.id);
@@ -217,6 +230,7 @@ const extractData = () => {
 // rendering the todo list
 const renderTodoList = () => {
     const todoStored = localStorage.getItem('todo');
+    const projectsStored = JSON.parse(localStorage.getItem('projects'));
     const todoListContainer = document.querySelector('#tasks-list');
    
     todoListContainer.innerHTML = '';
@@ -238,6 +252,13 @@ const renderTodoList = () => {
             taskDiv.classList.add('task-div', 'task-div-hover');
             taskDiv.setAttribute('id', `task-div-${task.id}`);
 
+            //adding border left color base on the projects color
+            projectsStored.forEach((project) => {
+                if(project.name.toLowerCase() === task.projects.toLowerCase()){
+                    taskDiv.style.borderLeft = `4px solid ${project.color}`;
+                }
+            })
+
             // left div in the principal div
             const taskInfo = document.createElement('div');
             taskInfo.classList.add('task-info');
@@ -252,32 +273,7 @@ const renderTodoList = () => {
             checkTask.classList.add(`task-checkbox`);
             checkTask.setAttribute('id', `task-checkbox-${task.id}`);
             checkTask.setAttribute('type', 'checkbox');
-            
-            // checking if the task is completed Notes: need some verification here
-            checkTask.addEventListener('change', (e) => {
-
-                /*
-                task.completed = e.target.checked; // Update task status
-
-                
-                // Update localStorage with the new tasks array
-                const updatedTasks = tasks.map(t => t.id === task.id ? task : t);
-                localStorage.setItem('todo', JSON.stringify(updatedTasks));
-                */
-                
-                // 🔴🔴
-                // Apply styles based on checkbox state
-                if(e.target.checked){
-                    document.querySelector(`#task-title-${task.id}`).classList.add('line-through');
-                    document.querySelector(`#task-div-${task.id}`).classList.add('task-completed');
-                    document.querySelector(`#task-div-${task.id}`).classList.add('task-div-hover');    
-                }else{
-                    document.querySelector(`#task-title-${task.id}`).classList.remove('line-through');
-                    document.querySelector(`#task-div-${task.id}`).classList.remove('task-completed');
-                    document.querySelector(`#task-div-${task.id}`).classList.remove('task-div-hover');
-                }
-                
-            });
+            checkTask.checked = task.completed;            
 
             const taskTitle = document.createElement('h3');
             taskTitle.classList.add(`task-title`);
@@ -324,7 +320,38 @@ const renderTodoList = () => {
             taskDiv.append(taskInfo, taskBtns);
 
             li.append(taskDiv);
-            todoListContainer.append(li);            
+            todoListContainer.append(li);  
+
+            if(task.completed){
+                document.querySelector(`#task-title-${task.id}`).classList.add('line-through');
+                document.querySelector(`#task-div-${task.id}`).classList.add('task-completed');
+                document.querySelector(`#task-div-${task.id}`).classList.add('task-div-hover'); 
+            }
+            
+            // adding eventlistener to specific checkbox
+            const checkTaskBox = document.querySelector(`#task-checkbox-${task.id}`);
+            checkTaskBox.addEventListener('change', (e) =>{
+                
+                const elementToEdit = todoList.find((todo) => todo.id === task.id);
+
+                elementToEdit.completed = e.target.checked;
+                updateLocalStorage();
+                console.log(elementToEdit);
+                console.log(elementToEdit.completed);
+
+                if(e.target.checked){
+                    document.querySelector(`#task-title-${task.id}`).classList.add('line-through');
+                    document.querySelector(`#task-div-${task.id}`).classList.add('task-completed');
+                    document.querySelector(`#task-div-${task.id}`).classList.add('task-div-hover');  
+                    
+                }else{
+                    document.querySelector(`#task-title-${task.id}`).classList.remove('line-through');
+                    document.querySelector(`#task-div-${task.id}`).classList.remove('task-completed');
+                    document.querySelector(`#task-div-${task.id}`).classList.remove('task-div-hover');
+
+                }
+
+            })
         })
        
 
@@ -403,6 +430,8 @@ const renderProjects = () => {
 const displayProjectsInAddTaskForm = () => {
     const projectSelect = document.querySelector('#projects');
 
+   
+
     projectSelect.innerHTML = '';
     projects.forEach((project) => {
         const projectOption = document.createElement('option');
@@ -433,6 +462,7 @@ const deleteProject = (id, name) => {
 //function to display todo list assigned to a project
 const displayProjectTask = (projectName) => {
     const todoListContainer = document.querySelector('#tasks-container');
+    const projectsStored = JSON.parse(localStorage.getItem('projects'));
 
     todoListContainer.innerHTML = '';
     const projectTasks = todoList.filter((todo) => todo.projects.toLowerCase() === projectName.toLowerCase());
@@ -457,6 +487,13 @@ const displayProjectTask = (projectName) => {
             taskDiv.classList.add('task-div', 'task-div-hover');
             taskDiv.setAttribute('id', `task-div-${task.id}`);
 
+            //adding border left color base on the projects color
+            projectsStored.forEach((project) => {
+                if(project.name.toLowerCase() === task.projects.toLowerCase()){
+                    taskDiv.style.borderLeft = `4px solid ${project.color}`;
+                }
+            })
+
             // left div in the principal div
             const taskInfo = document.createElement('div');
             taskInfo.classList.add('task-info');
@@ -471,22 +508,7 @@ const displayProjectTask = (projectName) => {
             checkTask.classList.add(`task-checkbox`);
             checkTask.setAttribute('id', `task-checkbox-${task.id}`);
             checkTask.setAttribute('type', 'checkbox');
-            
-            // checking if the task is completed Notes: need some verification here
-            checkTask.addEventListener('change', (e) => {
-                // 🔴🔴
-                // Apply styles based on checkbox state
-                if(e.target.checked){
-                    document.querySelector(`#task-title-${task.id}`).classList.add('line-through');
-                    document.querySelector(`#task-div-${task.id}`).classList.add('task-completed');
-                    document.querySelector(`#task-div-${task.id}`).classList.add('task-div-hover');    
-                }else{
-                    document.querySelector(`#task-title-${task.id}`).classList.remove('line-through');
-                    document.querySelector(`#task-div-${task.id}`).classList.remove('task-completed');
-                    document.querySelector(`#task-div-${task.id}`).classList.remove('task-div-hover');
-                }
-                
-            });
+            checkTask.checked = task.completed; 
 
             const taskTitle = document.createElement('h3');
             taskTitle.classList.add(`task-title`);
@@ -533,10 +555,46 @@ const displayProjectTask = (projectName) => {
             taskDiv.append(taskInfo, taskBtns);
 
             li.append(taskDiv);
-            tasksList.append(li);            
+            tasksList.append(li);  
+            todoListContainer.append(tasksTitle, tasksList);
+
+            //🔴🔴
+            if(task.completed){
+                document.querySelector(`#task-title-${task.id}`).classList.add('line-through');
+                document.querySelector(`#task-div-${task.id}`).classList.add('task-completed');
+                document.querySelector(`#task-div-${task.id}`).classList.add('task-div-hover'); 
+            }else{
+                document.querySelector(`#task-title-${task.id}`).classList.remove('line-through');
+                document.querySelector(`#task-div-${task.id}`).classList.remove('task-completed');
+                document.querySelector(`#task-div-${task.id}`).classList.remove('task-div-hover');
+            }
+            // adding eventlistener to specific checkbox
+            const checkTaskBox = document.querySelector(`#task-checkbox-${task.id}`);
+            checkTaskBox.addEventListener('change', (e) =>{
+                
+                const elementToEdit = todoList.find((todo) => todo.id === task.id);
+
+                elementToEdit.completed = e.target.checked;
+                updateLocalStorage();
+                console.log(elementToEdit);
+                console.log(elementToEdit.completed);
+
+                if(e.target.checked){
+                    document.querySelector(`#task-title-${task.id}`).classList.add('line-through');
+                    document.querySelector(`#task-div-${task.id}`).classList.add('task-completed');
+                    document.querySelector(`#task-div-${task.id}`).classList.add('task-div-hover');  
+                    
+                }else{
+                    document.querySelector(`#task-title-${task.id}`).classList.remove('line-through');
+                    document.querySelector(`#task-div-${task.id}`).classList.remove('task-completed');
+                    document.querySelector(`#task-div-${task.id}`).classList.remove('task-div-hover');
+
+                }
+
+            })
         })
 
-        todoListContainer.append(tasksTitle, tasksList);
+        
     }else{
         todoListContainer.innerHTML = `
             <h2 id="tasks-title">${projectName}'s Tasks</h2>
@@ -616,10 +674,49 @@ displayProjectDialogBtn.addEventListener('click', (e) => {
     })
 })
 
+// function to count the number of tasks assigned to a project
+const countTasksByProject = (projectName) => {
+    let count = 0;
+    
+    todoList.forEach((todo) => {
+        if(todo.projects.toLowerCase()  === projectName.toLowerCase()){
+          count++;   
+        }
+    });
+
+    return count;
+}
+
+// function to display the tasks count in the project list and local storage 
+const updateProjectsCount = (projectId) => {
+    const projectToUpdate = projects.find((project) => project.id === projectId );
+    
+
+    if(projectToUpdate){
+
+        // updating the task count in the project
+        projectToUpdate.taskCount = countTasksByProject(projectToUpdate.name);
+
+        // update the project list in local storage
+        localStorage.setItem('projects', JSON.stringify(projects));
+    }
+}
+
+// update the task count in each project 
+const updateProjectsCountInProjectList = () => {
+    projects.forEach((project) => {
+        updateProjectsCount(project.id);
+    });
+
+    renderProjects();
+}
+
 
 // rendering todo list and projects
+
 displayProjectsInAddTaskForm();
 renderTodoList();
 renderProjects();
+
 
 
